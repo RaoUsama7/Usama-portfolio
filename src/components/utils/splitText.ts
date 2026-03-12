@@ -1,6 +1,6 @@
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import anime from "animejs/lib/anime.es.js";
-import { wrapChars } from "./textSplitHelpers";
+import { wrapChars, wrapWords } from "./textSplitHelpers";
 
 ScrollTrigger.config({ ignoreMobileResize: true });
 
@@ -14,7 +14,7 @@ export default function setSplitText() {
 
   paras.forEach((para) => {
     para.classList.add("visible");
-    const chars = wrapChars(para);
+    const words = wrapWords(para);
 
     ScrollTrigger.create({
       trigger: para.parentElement?.parentElement ?? para,
@@ -22,7 +22,7 @@ export default function setSplitText() {
       toggleActions: "play pause resume reverse",
       onEnter: () => {
         anime({
-          targets: chars,
+          targets: words,
           opacity: [0, 1],
           translateY: [80, 0],
           duration: 1000,
