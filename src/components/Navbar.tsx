@@ -2,26 +2,28 @@ import { useEffect } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HoverLinks from "./HoverLinks";
 import { gsap } from "gsap";
-import { ScrollSmoother } from "gsap-trial/ScrollSmoother";
 import "./styles/Navbar.css";
 
-gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
-export let smoother: ScrollSmoother;
+gsap.registerPlugin(ScrollTrigger);
+export let smoother: { scrollTo: (target: string | Element | null, smooth?: boolean, position?: string) => void; scrollTop: (value: number) => void; paused: (value: boolean) => void } = {
+  scrollTo: (target) => {
+    const element =
+      typeof target === "string" ? document.querySelector(target) : target;
+    if (element instanceof HTMLElement) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  },
+  scrollTop: (value: number) => {
+    window.scrollTo({ top: value, behavior: "smooth" });
+  },
+  paused: () => {
+    // no-op placeholder to mirror ScrollSmoother API
+  },
+};
 
 const Navbar = () => {
   useEffect(() => {
-    smoother = ScrollSmoother.create({
-      wrapper: "#smooth-wrapper",
-      content: "#smooth-content",
-      smooth: 1.7,
-      speed: 1.7,
-      effects: true,
-      autoResize: true,
-      ignoreMobileResize: true,
-    });
-
     smoother.scrollTop(0);
-    smoother.paused(true);
 
     let links = document.querySelectorAll(".header ul a");
     links.forEach((elem) => {
@@ -31,13 +33,11 @@ const Navbar = () => {
           e.preventDefault();
           let elem = e.currentTarget as HTMLAnchorElement;
           let section = elem.getAttribute("data-href");
-          smoother.scrollTo(section, true, "top top");
+          smoother.scrollTo(section);
         }
       });
     });
-    window.addEventListener("resize", () => {
-      ScrollSmoother.refresh(true);
-    });
+    // native smooth scroll doesn't require refresh on resize
   }, []);
   return (
     <>
