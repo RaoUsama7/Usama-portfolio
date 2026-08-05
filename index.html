@@ -6,11 +6,25 @@
   <!-- <link rel="icon" type="image/svg+xml" href="/" /> -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Usama Rao - Full Stack Developer</title>
+
+  <!-- Start the 3D character download in parallel with the JS bundle instead of
+       waiting for the module graph to execute. This is the largest asset on the
+       critical path, so it gets a head start of roughly one round trip.
+       No crossorigin attribute: these are same-origin and the loaders fetch them
+       with default credentials, so adding it makes the preload miss and the file
+       gets downloaded twice. -->
+  <link rel="preload" as="fetch" href="/models/character.enc?v=2" />
+  <link rel="preload" as="fetch" href="/models/char_enviorment.hdr?v=2" />
 </head>
 
 <body>
   <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
+
+  <!-- ElevenLabs conversational agent. Lives outside #root so React never
+       touches it; the embed script is async and off the critical path. -->
+  <elevenlabs-convai agent-id="agent_5401kz9gxn6yfk3tc6nzjm6hy4eb"></elevenlabs-convai>
+  <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
 </body>
 
 </html>

@@ -13,12 +13,13 @@ const setCharacter = (
   dracoLoader.setDecoderPath("/draco/");
   loader.setDRACOLoader(dracoLoader);
 
-  const loadCharacter = () => {
+  const loadCharacter = (onProgress?: (fraction: number) => void) => {
     return new Promise<GLTF | null>(async (resolve, reject) => {
       try {
         const encryptedBlob = await decryptFile(
           "/models/character.enc?v=2",
-          "MyCharacter12"
+          "MyCharacter12",
+          onProgress
         );
         const blobUrl = URL.createObjectURL(new Blob([encryptedBlob]));
 
@@ -26,6 +27,7 @@ const setCharacter = (
         loader.load(
           blobUrl,
           async (gltf) => {
+            URL.revokeObjectURL(blobUrl);
             character = gltf.scene;
             await renderer.compileAsync(character, camera, scene);
             character.traverse((child: any) => {
@@ -62,6 +64,7 @@ const setCharacter = (
           },
           undefined,
           (error) => {
+            URL.revokeObjectURL(blobUrl);
             console.error("Error loading GLTF model:", error);
             reject(error);
           }

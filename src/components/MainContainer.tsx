@@ -8,6 +8,7 @@ import Navbar from "./Navbar";
 import SocialIcons from "./SocialIcons";
 import WhatIDo from "./WhatIDo";
 import Work from "./Work";
+import LazySection from "./LazySection";
 import setSplitText from "./utils/splitText";
 
 const TechStack = lazy(() => import("./TechStack"));
@@ -44,9 +45,14 @@ const MainContainer = ({ children }: PropsWithChildren) => {
             <Career />
             <Work />
             {isDesktopView && (
-              <Suspense fallback={<div>Loading....</div>}>
-                <TechStack />
-              </Suspense>
+              // The techstack chunk is by far the heaviest on the site (three.js
+              // + rapier physics + 8 textures). Hold it back until the section
+              // is nearly on screen instead of loading it on first paint.
+              <LazySection margin={600} placeholderClassName="techstack">
+                <Suspense fallback={<div className="techstack" />}>
+                  <TechStack />
+                </Suspense>
+              </LazySection>
             )}
             <Contact />
           </div>

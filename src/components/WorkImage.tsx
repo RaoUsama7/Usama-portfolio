@@ -36,7 +36,19 @@ const WorkImage = (props: Props) => {
             <MdArrowOutward />
           </div>
         )}
-        <img src={props.image} alt={props.alt} />
+        <img
+          src={props.image}
+          alt={props.alt}
+          loading="lazy"
+          decoding="async"
+          // A missing screenshot shows the placeholder instead of a broken icon.
+          onError={(e) => {
+            const img = e.currentTarget;
+            if (!img.src.endsWith("/images/placeholder.webp")) {
+              img.src = "/images/placeholder.webp";
+            }
+          }}
+        />
         {isVideo && <video src={video} autoPlay muted playsInline loop></video>}
       </a>
     </div>

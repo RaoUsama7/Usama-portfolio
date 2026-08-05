@@ -3,36 +3,39 @@ import "./styles/Work.css";
 import WorkImage from "./WorkImage";
 import { MdArrowBack, MdArrowForward } from "react-icons/md";
 
+// NOTE: the real screenshots (Solidx / radix / bond / sapphire / Maxlife .png)
+// are not in public/images, so every slide was requesting a missing file. Drop
+// the screenshots into public/images and point `image` at them to restore.
 const projects = [
   {
     title: "Solid Starters",
     category: "Low-Code Platform",
     tools: "Angular, Next.js, NestJS, MongoDB",
-    image: "/images/Solidx.png",
+    image: "/images/placeholder.webp",
   },
   {
     title: "Radix",
     category: "E-Commerce",
     tools: "Angular, Next.js, NestJS, CMS",
-    image: "/images/radix.png",
+    image: "/images/placeholder.webp",
   },
   {
     title: "Bond Cancellation",
     category: "Import-Export Automation",
     tools: "Angular, Next.js, NestJS, Workflows",
-    image: "/images/bond.png",
+    image: "/images/placeholder.webp",
   },
   {
     title: "Sapphire",
     category: "CRM Platform",
     tools: "AngularJS, NestJS, PostgreSQL",
-    image: "/images/sapphire.png",
+    image: "/images/placeholder.webp",
   },
   {
     title: "Mpro",
     category: "Insurance Platform",
     tools: "React.js, Node.js, Microservices",
-    image: "/images/Maxlife.png",
+    image: "/images/placeholder.webp",
   },
 ];
 

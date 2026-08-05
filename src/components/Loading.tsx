@@ -10,27 +10,33 @@ const Loading = ({ percent }: { percent: number }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [clicked, setClicked] = useState(false);
 
-  if (percent >= 100) {
-    setTimeout(() => {
+  // Runs in an effect, not in render: the previous version scheduled a fresh
+  // pair of timers on every re-render once percent hit 100.
+  const isComplete = percent >= 100;
+  useEffect(() => {
+    if (!isComplete) return;
+    let handoff: ReturnType<typeof setTimeout>;
+    const toWelcome = setTimeout(() => {
       setLoaded(true);
-      setTimeout(() => {
-        setIsLoaded(true);
-      }, 1000);
-    }, 600);
-  }
+      handoff = setTimeout(() => setIsLoaded(true), 400);
+    }, 200);
+    return () => {
+      clearTimeout(toWelcome);
+      clearTimeout(handoff);
+    };
+  }, [isComplete]);
 
   useEffect(() => {
+    if (!isLoaded) return;
+    let dismiss: ReturnType<typeof setTimeout>;
     import("./utils/initialFX").then((module) => {
-      if (isLoaded) {
-        setClicked(true);
-        setTimeout(() => {
-          if (module.initialFX) {
-            module.initialFX();
-          }
-          setIsLoading(false);
-        }, 900);
-      }
+      setClicked(true);
+      dismiss = setTimeout(() => {
+        module.initialFX?.();
+        setIsLoading(false);
+      }, 400);
     });
+    return () => clearTimeout(dismiss);
   }, [isLoaded]);
 
   function handleMouseMove(e: React.MouseEvent<HTMLElement>) {
@@ -92,29 +98,42 @@ const Loading = ({ percent }: { percent: number }) => {
 
 export default Loading;
 
+/** Share of the bar driven by the real model download; the rest covers decode. */
+const DOWNLOAD_SHARE = 85;
+
+/**
+ * Drives the loading bar from the actual model download rather than a timer.
+ * `download` maps real bytes onto 0-85%, `decoding` creeps through the decrypt
+ * and GLTF parse phase, and `loaded` finishes the bar off.
+ */
 export const setProgress = (setLoading: (value: number) => void) => {
-  let percent: number = 0;
+  let percent = 0;
+  let interval: ReturnType<typeof setInterval> | undefined;
 
-  let interval = setInterval(() => {
-    if (percent <= 50) {
-      let rand = Math.round(Math.random() * 5);
-      percent = percent + rand;
+  // The bar must never move backwards, whichever phase reports a value.
+  const set = (value: number) => {
+    const next = Math.min(100, Math.max(percent, Math.round(value)));
+    if (next !== percent) {
+      percent = next;
       setLoading(percent);
-    } else {
-      clearInterval(interval);
-      interval = setInterval(() => {
-        percent = percent + Math.round(Math.random());
-        setLoading(percent);
-        if (percent > 91) {
-          clearInterval(interval);
-        }
-      }, 2000);
     }
-  }, 100);
+  };
 
-  function clear() {
+  function download(fraction: number) {
+    set(fraction * DOWNLOAD_SHARE);
+  }
+
+  /**
+   * Decrypt + Draco parse happen off the network, so there is nothing real to
+   * measure. Creep slowly towards 97% so the bar doesn't look frozen, and stop
+   * short of 100 so completion still means completion.
+   */
+  function decoding() {
     clearInterval(interval);
-    setLoading(100);
+    interval = setInterval(() => {
+      if (percent >= 97) clearInterval(interval);
+      else set(percent + 1);
+    }, 90);
   }
 
   function loaded() {
@@ -122,14 +141,19 @@ export const setProgress = (setLoading: (value: number) => void) => {
       clearInterval(interval);
       interval = setInterval(() => {
         if (percent < 100) {
-          percent++;
-          setLoading(percent);
+          set(percent + 2);
         } else {
-          resolve(percent);
           clearInterval(interval);
+          resolve(percent);
         }
-      }, 2);
+      }, 10);
     });
   }
-  return { loaded, percent, clear };
+
+  function clear() {
+    clearInterval(interval);
+    set(100);
+  }
+
+  return { download, decoding, loaded, clear };
 };

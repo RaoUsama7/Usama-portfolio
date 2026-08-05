@@ -11,7 +11,6 @@ import {
   RapierRigidBody,
 } from "@react-three/rapier";
 
-const textureLoader = new THREE.TextureLoader();
 const imageUrls = [
   "/images/react2.webp",
   "/images/next2.webp",
@@ -22,12 +21,14 @@ const imageUrls = [
   "/images/typescript.webp",
   "/images/javascript.webp",
 ];
-const textures = imageUrls.map((url) => textureLoader.load(url));
 
 const sphereGeometry = new THREE.SphereGeometry(1, 28, 28);
 
+// Material index is baked in here rather than picked during render, where a
+// fresh Math.random() reassigned every sphere's logo on each re-render.
 const spheres = [...Array(30)].map(() => ({
   scale: [0.7, 1, 0.8, 1, 1][Math.floor(Math.random() * 5)],
+  materialIndex: Math.floor(Math.random() * imageUrls.length),
 }));
 
 type SphereProps = {
@@ -151,20 +152,32 @@ const TechStack = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+  // Textures load when the section mounts, not when the module is imported —
+  // previously all eight fired off as soon as the chunk was parsed.
   const materials = useMemo(() => {
-    return textures.map(
-      (texture) =>
-        new THREE.MeshPhysicalMaterial({
-          map: texture,
-          emissive: "#ffffff",
-          emissiveMap: texture,
-          emissiveIntensity: 0.3,
-          metalness: 0.5,
-          roughness: 1,
-          clearcoat: 0.1,
-        })
-    );
+    const textureLoader = new THREE.TextureLoader();
+    return imageUrls.map((url) => {
+      const texture = textureLoader.load(url);
+      return new THREE.MeshPhysicalMaterial({
+        map: texture,
+        emissive: "#ffffff",
+        emissiveMap: texture,
+        emissiveIntensity: 0.3,
+        metalness: 0.5,
+        roughness: 1,
+        clearcoat: 0.1,
+      });
+    });
   }, []);
+
+  useEffect(() => {
+    return () => {
+      materials.forEach((material) => {
+        material.map?.dispose();
+        material.dispose();
+      });
+    };
+  }, [materials]);
 
   return (
     <div className="techstack">
@@ -189,11 +202,11 @@ const TechStack = () => {
         <directionalLight position={[0, 5, -4]} intensity={2} />
         <Physics gravity={[0, 0, 0]}>
           <Pointer isActive={isActive} />
-          {spheres.map((props, i) => (
+          {spheres.map(({ scale, materialIndex }, i) => (
             <SphereGeo
               key={i}
-              {...props}
-              material={materials[Math.floor(Math.random() * materials.length)]}
+              scale={scale}
+              material={materials[materialIndex]}
               isActive={isActive}
             />
           ))}
