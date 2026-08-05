@@ -25,14 +25,16 @@ const Navbar = () => {
   useEffect(() => {
     smoother.scrollTop(0);
 
-    let links = document.querySelectorAll(".header ul a");
+    // Only in-page anchors carry data-href. Without this guard the handler
+    // swallowed every nav click, so links to real pages (/blog/) did nothing.
+    const links = document.querySelectorAll(".header ul a[data-href]");
     links.forEach((elem) => {
-      let element = elem as HTMLAnchorElement;
+      const element = elem as HTMLAnchorElement;
       element.addEventListener("click", (e) => {
         if (window.innerWidth > 1024) {
+          const section = element.getAttribute("data-href");
+          if (!section) return;
           e.preventDefault();
-          let elem = e.currentTarget as HTMLAnchorElement;
-          let section = elem.getAttribute("data-href");
           smoother.scrollTo(section);
         }
       });
@@ -61,6 +63,13 @@ const Navbar = () => {
           <li>
             <a data-href="#work" href="#work">
               <HoverLinks text="WORK" />
+            </a>
+          </li>
+          <li>
+            {/* Real navigation, not a scroll target: /blog is a separate static
+                page, so this must not be intercepted by the smooth scroller. */}
+            <a href="/blog/">
+              <HoverLinks text="BLOG" />
             </a>
           </li>
           <li>

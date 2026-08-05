@@ -1,4 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap");
+/* The Geist @import used to live here. A CSS @import cannot begin downloading
+   until this stylesheet has been fetched and parsed, which put the font behind
+   an extra round trip. It is now a preconnect + <link> in index.html. */
 
 :root {
   font-family: "Geist", sans-serif;

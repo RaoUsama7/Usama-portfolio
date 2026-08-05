@@ -27,8 +27,11 @@ const WhatIDo = () => {
   return (
     <div className="whatIDO">
       <div className="what-box">
+        {/* The <div> carries no whitespace, so this read as "WHATI DO" to
+            crawlers and screen readers. The space keeps the text correct
+            without changing the rendered layout. */}
         <h2 className="title">
-          W<span className="hat-h2">HAT</span>
+          W<span className="hat-h2">HAT</span>{" "}
           <div>
             I<span className="do-h2"> DO</span>
           </div>

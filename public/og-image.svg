@@ -1,0 +1,26 @@
+<!-- Source artwork for the Open Graph image.
+     Export this to public/og-image.png at 1200x630 — most social platforms
+     (LinkedIn, X, Slack, WhatsApp) will not render an SVG og:image. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a0e17"/>
+      <stop offset="100%" stop-color="#050810"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.85" cy="0.15" r="0.6">
+      <stop offset="0%" stop-color="#5eead4" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#5eead4" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <rect x="0" y="0" width="1200" height="6" fill="#5eead4"/>
+
+  <g font-family="Geist, system-ui, -apple-system, 'Segoe UI', sans-serif">
+    <text x="80" y="250" fill="#eae5ec" font-size="82" font-weight="600" letter-spacing="-1">Usama Rao</text>
+    <text x="80" y="330" fill="#5eead4" font-size="42" font-weight="500">Full Stack Developer</text>
+    <text x="80" y="404" fill="#8b93a5" font-size="28" font-weight="400">React &#183; Angular &#183; Next.js &#183; Node.js &#183; NestJS</text>
+    <text x="80" y="546" fill="#8b93a5" font-size="26" font-weight="400">usamarao.com</text>
+  </g>
+</svg>

@@ -3,9 +3,43 @@
 
 <head>
   <meta charset="UTF-8" />
-  <!-- <link rel="icon" type="image/svg+xml" href="/" /> -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Usama Rao - Full Stack Developer</title>
+
+  <!-- Tier 1: core indexing signals -->
+  <title>Usama Rao — Full Stack Developer (React, Next.js, NestJS)</title>
+  <meta name="description"
+    content="Full stack developer building scalable web applications with React, Angular, Next.js, Node.js and NestJS. Available for freelance and contract work." />
+  <link rel="canonical" href="https://usamarao.com/" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="author" content="Usama Rao" />
+  <meta name="theme-color" content="#0a0e17" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="alternate" type="application/rss+xml" title="Usama Rao — Blog" href="https://usamarao.com/rss.xml" />
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Usama Rao" />
+  <meta property="og:title" content="Usama Rao — Full Stack Developer" />
+  <meta property="og:description"
+    content="Full stack developer building scalable web applications with React, Angular, Next.js, Node.js and NestJS. Available for freelance and contract work." />
+  <meta property="og:url" content="https://usamarao.com/" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:image" content="https://usamarao.com/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Usama Rao — Full Stack Developer" />
+  <meta name="twitter:description"
+    content="Full stack developer building scalable web applications with React, Angular, Next.js, Node.js and NestJS." />
+  <meta name="twitter:image" content="https://usamarao.com/og-image.png" />
+  <meta name="twitter:creator" content="@The_real_me007" />
+
+  <!-- Tier 3: the font was being pulled in by a CSS @import, which cannot start
+       downloading until the stylesheet itself has parsed. Preconnect + a direct
+       link removes that chained request from the critical path. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" />
 
   <!-- Start the 3D character download in parallel with the JS bundle instead of
        waiting for the module graph to execute. This is the largest asset on the
@@ -15,6 +49,60 @@
        gets downloaded twice. -->
   <link rel="preload" as="fetch" href="/models/character.enc?v=2" />
   <link rel="preload" as="fetch" href="/models/char_enviorment.hdr?v=2" />
+
+  <!-- Tier 2: structured data. Person + ProfessionalService so search engines can
+       associate the site with a named developer offering services, plus WebSite
+       to declare the blog as part of the same entity. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://usamarao.com/#person",
+        "name": "Usama Rao",
+        "jobTitle": "Full Stack Developer",
+        "url": "https://usamarao.com/",
+        "email": "mailto:raorvp20@gmail.com",
+        "description": "Full stack developer with experience building scalable web applications using React.js, Angular, Next.js, Node.js and NestJS.",
+        "knowsAbout": [
+          "React.js", "Angular", "Next.js", "TypeScript", "JavaScript",
+          "Node.js", "NestJS", "MongoDB", "PostgreSQL", "Microservices",
+          "CMS development", "Low-code platforms"
+        ],
+        "alumniOf": { "@type": "EducationalOrganization", "name": "BSc in Computer Science" },
+        "sameAs": [
+          "https://github.com/RaoUsama7",
+          "https://www.linkedin.com/in/usamarao007",
+          "https://x.com/The_real_me007"
+        ]
+      },
+      {
+        "@type": "ProfessionalService",
+        "@id": "https://usamarao.com/#service",
+        "name": "Usama Rao — Full Stack Development",
+        "url": "https://usamarao.com/",
+        "description": "Freelance and contract full stack web development: React and Angular front ends, Node.js and NestJS APIs, microservices and CMS platforms.",
+        "provider": { "@id": "https://usamarao.com/#person" },
+        "areaServed": "Worldwide",
+        "serviceType": [
+          "Web application development",
+          "Frontend development",
+          "Backend API development",
+          "Microservices architecture"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://usamarao.com/#website",
+        "url": "https://usamarao.com/",
+        "name": "Usama Rao",
+        "inLanguage": "en",
+        "publisher": { "@id": "https://usamarao.com/#person" }
+      }
+    ]
+  }
+  </script>
 </head>
 
 <body>

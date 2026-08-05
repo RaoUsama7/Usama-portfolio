@@ -8,8 +8,11 @@ const Landing = ({ children }: PropsWithChildren) => {
         <div className="landing-container">
           <div className="landing-intro">
             <h2>Hello! I'm</h2>
+            {/* The <br> contributes no whitespace, so the accessible name and
+                the indexed text both read "UsamaRao". The trailing space fixes
+                the text content; the line break still renders as before. */}
             <h1>
-              Usama
+              {"Usama "}
               <br />
               <span>Rao</span>
             </h1>
